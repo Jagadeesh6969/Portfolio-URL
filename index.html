@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jagadeesh Chappa — Game & Interactive Systems Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#12151a;
+    --bg-panel:#181c23;
+    --bg-panel-2:#1e232b;
+    --grid-line: rgba(255,255,255,0.045);
+    --edge: rgba(255,255,255,0.09);
+    --text:#e9ecf1;
+    --text-dim:#8b93a3;
+    --text-faint:#5c6472;
+    --orange:#ef8034;
+    --orange-dim: rgba(239,128,52,0.14);
+    --cyan:#57d9c9;
+    --cyan-dim: rgba(87,217,201,0.14);
+    --font-display:'Space Grotesk', sans-serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 48px 48px;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+
+  a{ color:inherit; }
+  ::selection{ background:var(--orange); color:#12151a; }
+
+  /* ---------- utility ---------- */
+  .wrap{ max-width:1080px; margin:0 auto; padding:0 28px; }
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:18px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:7px; height:7px;
+    background:var(--cyan);
+    display:inline-block;
+    box-shadow:0 0 8px var(--cyan);
+  }
+
+  /* corner-bracket "viewport" frame, echoes selecting an object in a 3D viewport */
+  .bracket{ position:relative; }
+  .bracket::before, .bracket::after,
+  .bracket .bl, .bracket .br{
+    content:""; position:absolute; width:14px; height:14px;
+    border-color:var(--edge); opacity:0; transition:opacity .25s ease, border-color .25s ease;
+  }
+  .bracket::before{ top:-1px; left:-1px; border-top:2px solid; border-left:2px solid; }
+  .bracket::after{ top:-1px; right:-1px; border-top:2px solid; border-right:2px solid; }
+  .bracket .bl{ bottom:-1px; left:-1px; border-bottom:2px solid; border-left:2px solid; }
+  .bracket .br{ bottom:-1px; right:-1px; border-bottom:2px solid; border-right:2px solid; }
+  .bracket::before,.bracket::after,.bracket .bl,.bracket .br{ opacity:1; }
+  .bracket:hover::before,.bracket:hover::after,.bracket:hover .bl,.bracket:hover .br{
+    border-color:var(--orange);
+  }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    background:rgba(18,21,26,0.82);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--edge);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:64px; }
+  .logo{
+    font-family:var(--font-mono); font-size:14px; letter-spacing:0.05em;
+    color:var(--text); text-decoration:none; display:flex; align-items:center; gap:8px;
+  }
+  .logo .dot{ width:8px; height:8px; background:var(--orange); display:inline-block; }
+  .navlinks{ display:flex; gap:32px; font-family:var(--font-mono); font-size:12px; letter-spacing:0.06em; text-transform:uppercase; }
+  .navlinks a{ text-decoration:none; color:var(--text-dim); transition:color .2s; position:relative; }
+  .navlinks a:hover{ color:var(--cyan); }
+  .navlinks a:focus-visible, a:focus-visible, button:focus-visible{ outline:2px solid var(--cyan); outline-offset:3px; }
+  @media (max-width:720px){ .navlinks{ display:none; } }
+
+  /* ---------- hero ---------- */
+  header.hero{
+    min-height:100vh;
+    display:flex; align-items:center;
+    position:relative;
+    padding-top:64px;
+    overflow:hidden;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 0.9fr;
+    gap:40px;
+    align-items:center;
+    width:100%;
+  }
+  @media (max-width:860px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .coords{
+    font-family:var(--font-mono); font-size:11px; color:var(--text-faint);
+    letter-spacing:0.08em; margin-bottom:28px;
+  }
+
+  h1.name{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:clamp(42px, 7vw, 84px);
+    line-height:0.98;
+    letter-spacing:-0.01em;
+    text-transform:uppercase;
+  }
+  h1.name .accent{ color:var(--orange); }
+
+  .role{
+    font-family:var(--font-mono);
+    font-size:15px;
+    color:var(--cyan);
+    margin-top:18px;
+    letter-spacing:0.02em;
+  }
+
+  .summary{
+    margin-top:24px;
+    max-width:560px;
+    color:var(--text-dim);
+    font-size:16px;
+  }
+
+  .hero-cta{ margin-top:34px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.06em; text-transform:uppercase;
+    padding:13px 22px; text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    border:1px solid var(--edge); transition:all .2s ease; background:var(--bg-panel);
+  }
+  .btn.primary{ background:var(--orange); color:#161311; border-color:var(--orange); font-weight:600; }
+  .btn.primary:hover{ background:#ff9046; }
+  .btn:not(.primary):hover{ border-color:var(--cyan); color:var(--cyan); }
+
+  /* rotating wireframe cube — signature visual, nods to 3D modeling/Blender/Unity work */
+  .cube-stage{
+    display:flex; align-items:center; justify-content:center;
+    perspective:900px;
+    height:320px;
+  }
+  .cube{
+    width:150px; height:150px;
+    position:relative;
+    transform-style:preserve-3d;
+    animation: spin 16s linear infinite;
+  }
+  .cube .face{
+    position:absolute; width:150px; height:150px;
+    border:1px solid rgba(87,217,201,0.55);
+    background:linear-gradient(135deg, rgba(239,128,52,0.06), rgba(87,217,201,0.05));
+  }
+  .cube .face:nth-child(1){ transform: translateZ(75px); }
+  .cube .face:nth-child(2){ transform: rotateY(180deg) translateZ(75px); }
+  .cube .face:nth-child(3){ transform: rotateY(90deg) translateZ(75px); }
+  .cube .face:nth-child(4){ transform: rotateY(-90deg) translateZ(75px); }
+  .cube .face:nth-child(5){ transform: rotateX(90deg) translateZ(75px); }
+  .cube .face:nth-child(6){ transform: rotateX(-90deg) translateZ(75px); }
+  @keyframes spin{
+    from{ transform: rotateX(-20deg) rotateY(0deg); }
+    to{ transform: rotateX(-20deg) rotateY(360deg); }
+  }
+  @media (max-width:860px){ .cube-stage{ height:200px; } .cube, .cube .face{ width:110px; height:110px; } .cube .face:nth-child(1){transform:translateZ(55px);} .cube .face:nth-child(2){transform:rotateY(180deg) translateZ(55px);} .cube .face:nth-child(3){transform:rotateY(90deg) translateZ(55px);} .cube .face:nth-child(4){transform:rotateY(-90deg) translateZ(55px);} .cube .face:nth-child(5){transform:rotateX(90deg) translateZ(55px);} .cube .face:nth-child(6){transform:rotateX(-90deg) translateZ(55px);} }
+
+  /* ---------- sections ---------- */
+  section{ padding:110px 0; position:relative; border-top:1px solid var(--edge); }
+  h2.section-title{
+    font-family:var(--font-display); font-weight:600;
+    font-size:clamp(28px,4vw,40px);
+    text-transform:uppercase;
+    margin-bottom:44px;
+    display:flex; align-items:baseline; gap:16px;
+  }
+  h2.section-title .idx{ font-family:var(--font-mono); font-size:15px; color:var(--text-faint); font-weight:400; }
+
+  /* ---------- skills / loadout ---------- */
+  .loadout{ display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:1px; background:var(--edge); border:1px solid var(--edge); }
+  .loadout-item{ background:var(--bg-panel); padding:26px 24px; }
+  .loadout-item .label{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--orange); margin-bottom:14px; }
+  .loadout-item ul{ list-style:none; }
+  .loadout-item li{ font-size:14px; color:var(--text-dim); padding:5px 0; display:flex; align-items:center; gap:10px; }
+  .loadout-item li::before{ content:""; width:5px; height:5px; background:var(--cyan); flex-shrink:0; }
+
+  /* ---------- projects / missions ---------- */
+  .missions{ display:flex; flex-direction:column; gap:1px; background:var(--edge); border:1px solid var(--edge); }
+  .mission{ background:var(--bg-panel); padding:32px 30px; display:grid; grid-template-columns:120px 1fr; gap:26px; }
+  @media (max-width:640px){ .mission{ grid-template-columns:1fr; gap:10px; } }
+  .mission .tag{ font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:0.08em; text-transform:uppercase; padding-top:4px; }
+  .mission h3{ font-family:var(--font-display); font-size:21px; font-weight:600; margin-bottom:10px; text-transform:uppercase; letter-spacing:0.01em; }
+  .mission p, .mission ul{ color:var(--text-dim); font-size:14.5px; }
+  .mission ul{ list-style:none; margin-top:8px; }
+  .mission li{ padding:4px 0; padding-left:16px; position:relative; }
+  .mission li::before{ content:"›"; position:absolute; left:0; color:var(--orange); }
+  .mission .stats{ display:flex; gap:22px; margin-top:16px; flex-wrap:wrap; }
+  .mission .stat{ font-family:var(--font-mono); font-size:11px; color:var(--cyan); border:1px solid rgba(87,217,201,0.3); padding:5px 10px; }
+
+  /* ---------- achievements (certifications) ---------- */
+  .achievements{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+  .badge{
+    position:relative;
+    background:var(--bg-panel);
+    border:1px solid var(--edge);
+    padding:22px 22px 22px 20px;
+    display:flex; gap:16px; align-items:flex-start;
+    overflow:hidden;
+  }
+  .badge::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--orange);
+  }
+  .badge .icon{
+    width:42px; height:42px; flex-shrink:0;
+    border:1px solid var(--orange);
+    display:flex; align-items:center; justify-content:center;
+    transform:rotate(45deg);
+  }
+  .badge .icon span{ transform:rotate(-45deg); font-family:var(--font-mono); font-size:14px; color:var(--orange); font-weight:600; }
+  .badge .body .unlocked{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-faint); margin-bottom:6px; }
+  .badge .body h4{ font-family:var(--font-display); font-size:16px; font-weight:600; margin-bottom:4px; }
+  .badge .body .when{ font-family:var(--font-mono); font-size:12px; color:var(--text-dim); }
+
+  /* ---------- education ---------- */
+  .edu{ display:flex; gap:26px; align-items:flex-start; flex-wrap:wrap; }
+  .edu .yr{ font-family:var(--font-mono); font-size:13px; color:var(--cyan); border:1px solid rgba(87,217,201,0.3); padding:8px 14px; white-space:nowrap; }
+  .edu h3{ font-family:var(--font-display); font-size:22px; text-transform:uppercase; margin-bottom:6px; }
+  .edu p{ color:var(--text-dim); font-size:14.5px; }
+
+  /* ---------- contact / footer ---------- */
+  footer{ padding:100px 0 60px; border-top:1px solid var(--edge); }
+  footer h2{ font-family:var(--font-display); font-size:clamp(30px,5vw,52px); text-transform:uppercase; max-width:640px; line-height:1.05; margin-bottom:36px; }
+  footer h2 .accent{ color:var(--orange); }
+  .contact-links{ display:flex; flex-wrap:wrap; gap:14px; margin-bottom:60px; }
+  .foot-bottom{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-family:var(--font-mono); font-size:11px; color:var(--text-faint); letter-spacing:0.05em; padding-top:26px; border-top:1px solid var(--edge); }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#top" class="logo"><span class="dot"></span>JC_</a>
+    <div class="navlinks">
+      <a href="#skills">Skills</a>
+      <a href="#projects">Projects</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="coords">FINAL-YEAR B.TECH · CSE (GAMING TECHNOLOGY) · VIT BHOPAL</div>
+      <h1 class="name">Jagadeesh<br><span class="accent">Chappa</span></h1>
+      <div class="role">// Game Developer · Interactive Systems · 3D Visualization</div>
+      <p class="summary">Building engaging gaming environments and interactive applications — from Unity-driven mechanics to Blender-modeled 3D worlds. Focused on scripting, usability, and turning complex ideas into experiences people can actually hold and explore.</p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#projects">View Projects</a>
+        <a class="btn" href="mailto:jagadeeshchappa62@gmail.com">Get In Touch</a>
+      </div>
+    </div>
+    <div class="cube-stage" aria-hidden="true">
+      <div class="cube">
+        <div class="face"></div><div class="face"></div><div class="face"></div>
+        <div class="face"></div><div class="face"></div><div class="face"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="skills">
+  <div class="wrap">
+    <h2 class="section-title"><span class="idx">01</span> Loadout</h2>
+    <div class="loadout">
+      <div class="loadout-item">
+        <div class="label">Programming</div>
+        <ul><li>Python</li><li>Java</li></ul>
+      </div>
+      <div class="loadout-item">
+        <div class="label">Game Development</div>
+        <ul><li>Unity Engine</li><li>Blender (3D / Animation)</li></ul>
+      </div>
+      <div class="loadout-item">
+        <div class="label">Tools</div>
+        <ul><li>Excel</li><li>PowerPoint</li><li>MySQL</li></ul>
+      </div>
+      <div class="loadout-item">
+        <div class="label">Platforms & IDEs</div>
+        <ul><li>Visual Studio Code</li><li>Google Colab</li><li>ROS</li><li>ThingSpeak</li></ul>
+      </div>
+      <div class="loadout-item">
+        <div class="label">Soft Skills</div>
+        <ul><li>Communication</li><li>Team Management</li><li>Problem Analysis & Solving</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <h2 class="section-title"><span class="idx">02</span> Projects</h2>
+    <div class="missions">
+
+      <div class="mission bracket">
+        <span class="bl"></span><span class="br"></span>
+        <div class="tag">VR / AR</div>
+        <div>
+          <h3>VR &amp; AR Human Anatomy</h3>
+          <p>An interactive 3D anatomy experience letting students hold and explore vital organs in the palm of their hands — bridging the gap between traditional textbooks and physical reality.</p>
+          <ul>
+            <li>Designed detailed 3D human anatomy models — muscular system and internal organs — in Blender for realistic visualization and animation.</li>
+            <li>Integrated Hand AR and Room AR modes into the application.</li>
+            <li>Designed interfaces for interactive applications and game environments, focused on usability and visual appeal.</li>
+          </ul>
+          <div class="stats">
+            <span class="stat">Reduces cognitive load</span>
+            <span class="stat">Fosters scientific curiosity</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission bracket">
+        <span class="bl"></span><span class="br"></span>
+        <div class="tag">Fellowship</div>
+        <div>
+          <h3>FOSSEE Summer Fellowship</h3>
+          <p>Summer fellowship focused on image-based processing and 3D animation workflows.</p>
+          <ul>
+            <li>Developed vector scaling projects through image-based processing techniques.</li>
+            <li>Designed an animation in Blender.</li>
+            <li>Learned GIMP for graphic and image editing.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="wrap">
+    <h2 class="section-title"><span class="idx">03</span> Achievements Unlocked</h2>
+    <div class="achievements">
+      <div class="badge">
+        <div class="icon"><span>AI</span></div>
+        <div class="body">
+          <div class="unlocked">Certification</div>
+          <h4>Python, AI &amp; ML</h4>
+          <div class="when">Nov 2025 – May 2025</div>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="icon"><span>HCI</span></div>
+        <div class="body">
+          <div class="unlocked">NPTEL · Elite, Top 55%</div>
+          <h4>Human Computer Interaction</h4>
+          <div class="when">Jan – Apr 2025</div>
+        </div>
+      </div>
+      <div class="badge">
+        <div class="icon"><span>JV</span></div>
+        <div class="body">
+          <div class="unlocked">Certification</div>
+          <h4>Java Basics</h4>
+          <div class="when">July 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <h2 class="section-title"><span class="idx">04</span> Education</h2>
+    <div class="edu">
+      <div class="yr">In Progress</div>
+      <div>
+        <h3>Bachelor of Technology</h3>
+        <p>CSE (Gaming Technology)<br>Vellore Institute of Technology — Bhopal, Kothri Kalan, Bhopal</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <h2>Let's build something <span class="accent">interactive</span>.</h2>
+    <div class="contact-links">
+      <a class="btn primary" href="mailto:jagadeeshchappa62@gmail.com">jagadeeshchappa62@gmail.com</a>
+      <a class="btn" href="tel:+919391495158">+91 93914 95158</a>
+      <a class="btn" href="https://www.linkedin.com/in/jagadeesh-ch-797213376/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/Jagadeesh6969" target="_blank" rel="noopener">GitHub</a>
+    </div>
+    <div class="foot-bottom">
+      <span>JAGADEESH CHAPPA © 2026</span>
+      <span>BUILT WITH UNITY, BLENDER &amp; A LOT OF SCRIPTING</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
